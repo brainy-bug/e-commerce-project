@@ -12,10 +12,13 @@ import {
 const filter_reducer = (state, action) => {
   switch (action.type) {
     case LOAD_PRODUCTS:
+      let maxPrice = action.payload.map((p) => p.price);
+      maxPrice = Math.max(...maxPrice);
       return {
         ...state,
         all_products: [...action.payload],
         filtered_products: [...action.payload],
+        filters: { ...state.filters, max_price: maxPrice, price: maxPrice },
       };
     case SET_GRIDVIEW:
       return {
@@ -76,9 +79,38 @@ const filter_reducer = (state, action) => {
         },
       };
     case FILTER_PRODUCTS:
-      return {
-        ...state,
-      };
+      const { all_products } = state;
+      const { text, category, company, color, price, shipping } = state.filters;
+      let tempProduct = [...all_products];
+      if (text) {
+        tempProduct = tempProduct.filter((product) =>
+          product.name.toLowerCase().startsWith(text)
+        );
+      }
+      if (category !== "all") {
+        tempProduct = tempProduct.filter(
+          (product) => product.category === category
+        );
+      }
+      if (company !== "all") {
+        tempProduct = tempProduct.filter(
+          (product) => product.company === company
+        );
+      }
+      if (color !== "all") {
+        tempProduct = tempProduct.filter((product) => {
+          return product.colors.find((c) => c === color);
+        });
+      }
+      // filter by price
+      tempProduct = tempProduct.filter((product) => product.price <= price);
+      // filter by shipping
+      if (shipping) {
+        tempProduct = tempProduct.filter(
+          (product) => product.shipping === true
+        );
+      }
+      return { ...state, filtered_products: tempProduct };
 
     default:
       throw new Error(`No Matching "${action.type}" - action type`);
