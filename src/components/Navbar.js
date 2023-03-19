@@ -31,10 +31,10 @@ const Nav = () => {
                 <Link to={url}>{text}</Link>
               </li>
             );
-          })}
+          })} 
           {myUser && (
             <li>
-              <Link to='/checkout'>checkout</Link>
+              <Link to='/cart/checkout'>checkout</Link>
             </li>
           )}
         </ul>
