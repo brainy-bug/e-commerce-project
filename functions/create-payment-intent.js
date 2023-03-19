@@ -1,7 +1,7 @@
-// require("dotenv").config(); 
+require("dotenv").config();
 const stripe = require("stripe")(process.env.REACT_APP_STRIPE_SECRET_KEY);
 
-export async function handler(event) {
+exports.handler = async function (event) {
   if (event.body) {
     const { shipping_fee, total_amount } = JSON.parse(event.body);
 
@@ -33,4 +33,4 @@ export async function handler(event) {
     statusCode: 200,
     body: "Payment-intent!",
   };
-}
+};
