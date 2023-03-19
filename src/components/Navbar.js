@@ -9,7 +9,7 @@ import { useProductsContext } from "../context/products_context";
 import { useUserContext } from "../context/user_context";
 
 const Nav = () => {
-  const { myUser, loginWithRedirect } = useUserContext();
+  const { myUser } = useUserContext();
   const { openSidebar } = useProductsContext();
 
   return (
